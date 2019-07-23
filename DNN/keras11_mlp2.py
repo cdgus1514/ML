@@ -9,9 +9,9 @@ y = np.array([range(501, 601)])
 print(x.shape)
 print(y.shape)
 
+
 x = np.transpose(x)
 y = np.transpose(y)
-
 
 print(x.shape)
 print(y.shape)
