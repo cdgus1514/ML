@@ -21,31 +21,14 @@ model.add(Dense(7, input_dim=1, activation="relu")) #  input_dim=1 >> (column이
 
 model.add(Dense(3000))
 model.add(Dense(30))
-model.add(Dense(8000))
+model.add(Dense(3000))
+model.add(Dense(300))
+model.add(Dense(3000))
 model.add(Dense(30))
-model.add(Dense(8000))
-model.add(Dense(30))
-model.add(Dense(8000))
-model.add(Dense(30))
-model.add(Dense(8000))
-model.add(Dense(30))
-model.add(Dense(8000))
-model.add(Dense(30))
-model.add(Dense(8000))
-model.add(Dense(30))
-model.add(Dense(8000))
-model.add(Dense(30))
-model.add(Dense(8000))
-model.add(Dense(30))
-model.add(Dense(8000))
-model.add(Dense(30))
-model.add(Dense(8000))
-model.add(Dense(30))
-model.add(Dense(8000))
-model.add(Dense(30))
-model.add(Dense(8000))
-model.add(Dense(30))
-model.add(Dense(8000))
+model.add(Dense(30000))
+model.add(Dense(10))
+model.add(Dense(300000))
+model.add(Dense(5))
 model.add(Dense(1))
 
 
@@ -55,7 +38,7 @@ model.compile(loss="mse", optimizer="adam", metrics=["mse"])
 # 훈련실행(구성한 모델에 x,y 데이터를 n개씩 짤라서 n번 반복 훈련)
 # model.fit(x, y, epochs=20, batch_size=3)   # epochs >> 만들어준 모델링을 n회 반복
                                            # batch_size >> n개씩 짤라서 연산
-model.fit(x_train, y_train, epochs=100, batch_size=1)
+model.fit(x_train, y_train, epochs=100, batch_size=1, validation_data=(x_val, y_val))
 
 
 # 4. 평가예측
