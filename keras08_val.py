@@ -1,13 +1,14 @@
 import numpy as np
 
 # 1. 학습데이터
-x_train = np.array([1,2,3,4,5,6,7,8,9,10])  #10행 1열
+x_train = np.array([1,2,3,4,5,6,7,8,9,10])  # 훈련데이터셋 (10행,1열)
 y_train = np.array([1,2,3,4,5,6,7,8,9,10])
-x_test = np.array([11,12,13,14,15,16,17,18,19,20])
-y_test = np.array([11,12,13,14,15,16,17,18,19,20])
-x3 = np.array([101, 102, 103, 104, 105, 106])   #6행 1열
-x4 = np.array(range(30, 50))
 
+x_test = np.array([11,12,13,14,15,16,17,18,19,20]) # 평가데이터셋
+y_test = np.array([11,12,13,14,15,16,17,18,19,20])
+
+x_val = np.array([181,182,183,184,185]) # 검증데이터셋
+y_val = np.array([181,182,183,184,185])
 
 from keras.models import Sequential
 from keras.layers import Dense
@@ -17,10 +18,6 @@ model = Sequential()
 # 2. 모델구성(레이어, 노드 개수 설정)
 model.add(Dense(7, input_dim=1, activation="relu")) #  input_dim=1 >> (column이 1개인 input), relu(완전 열결 층)
 # model.add(Dense(5, input_shape=(1, ), activation="relu")) # input_shape=(1, ) >>(1행 n열인 input)
-# model.add(Dense(13))
-# model.add(Dense(8))
-# model.add(Dense(3))
-# model.add(Dense(1))
 
 model.add(Dense(3000))
 model.add(Dense(30))
