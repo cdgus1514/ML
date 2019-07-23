@@ -6,17 +6,28 @@ import numpy as np
 x = np.array([range(100), range(311,411)]).reshape(100,2)
 y = np.array([range(501, 601), range(711, 811)]).reshape(100,2)
 
-
 print(x.shape)
 print(y.shape)
 
-'''
+# x = np.transpose(x)
+# y = np.transpose(y)
+
+
 # 데이터 분할( 6/2/2)
 from sklearn.model_selection import train_test_split
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=66, test_size=0.4)   # traint 60 / test 40
 x_val, x_test, y_val, y_test = train_test_split(x_test, y_test, random_state=66, test_size=0.5) # val 20 / test 20
 
+
+# print("x_test")
+# print(x_test, len(x_test))
+# print("\nx_train")
+# print(x_train, len(x_train))
+# print("\nx_val")
+# print(x_val, len(x_val))
+
+print(x_train.shape)
 
 
 from keras.models import Sequential
@@ -25,8 +36,8 @@ model = Sequential()
 
 
 # 2. 모델구성(레이어, 노드 개수 설정)
-model.add(Dense(7, input_dim=1, activation="relu")) #  input_dim=1 >> (column이 1개인 input), relu(완전 열결 층)
-# model.add(Dense(5, input_shape=(1, ), activation="relu")) # input_shape=(1, ) >>(1행 n열인 input)
+# model.add(Dense(7, input_dim=1, activation="relu")) #  input_dim=1 >> (column이 1개인 input), relu(완전 열결 층)
+model.add(Dense(5, input_shape=(2, ), activation="relu")) # input_shape=(1, ) >>(1행 n열인 input)
 
 model.add(Dense(3000))
 model.add(Dense(30))
@@ -37,7 +48,7 @@ model.add(Dense(30))
 model.add(Dense(10))
 model.add(Dense(3000))
 model.add(Dense(5))
-model.add(Dense(1))
+model.add(Dense(2))
 
 
 # 3. 훈련
@@ -76,4 +87,3 @@ from sklearn.metrics import r2_score
 r2_y_predict = r2_score(y_test, y_predict)
 print("R2 : ", r2_y_predict)
 
-'''
