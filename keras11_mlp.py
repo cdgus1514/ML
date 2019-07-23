@@ -3,8 +3,8 @@ import numpy as np
 # 1. 학습데이터
 # x = np.array(range(1,101))
 # y = np.array(range(1,101))
-x = np.array([range(100), range(311,411)]).reshape(100,2)
-y = np.array([range(501, 601), range(711, 811)]).reshape(100,2)
+x = np.array([range(100), range(311,411), range(601,701)]).reshape(100,3)
+y = np.array([range(501, 601), range(711, 811), range(901, 1001)]).reshape(100,3)
 
 print(x.shape)
 print(y.shape)
@@ -30,6 +30,7 @@ x_val, x_test, y_val, y_test = train_test_split(x_test, y_test, random_state=66,
 print(x_train.shape)
 
 
+
 from keras.models import Sequential
 from keras.layers import Dense
 model = Sequential()
@@ -37,8 +38,7 @@ model = Sequential()
 
 # 2. 모델구성(레이어, 노드 개수 설정)
 # model.add(Dense(7, input_dim=1, activation="relu")) #  input_dim=1 >> (column이 1개인 input), relu(완전 열결 층)
-model.add(Dense(5, input_shape=(2, ), activation="relu")) # input_shape=(1, ) >>(1행 n열인 input)
-
+model.add(Dense(5, input_shape=(3, ), activation="relu")) # input_shape=(1, ) >>(1행 n열인 input)
 model.add(Dense(3000))
 model.add(Dense(30))
 model.add(Dense(3000))
