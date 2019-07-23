@@ -3,6 +3,8 @@ import numpy as np
 # 1. 학습데이터
 # x = np.array(range(1,101))
 # y = np.array(range(1,101))
+
+# input c=3, output c=1
 x = np.array([range(100), range(311,411), range(100)])
 y = np.array([range(501, 601)])
 
