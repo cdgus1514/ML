@@ -24,15 +24,9 @@ from sklearn.model_selection import train_test_split
 x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=66, test_size=0.4)   # traint 60 / test 40
 x_val, x_test, y_val, y_test = train_test_split(x_test, y_test, random_state=66, test_size=0.5) # val 20 / test 20
 
-
-# print("x_test")
-# print(x_test, len(x_test))
-# print("\nx_train")
-# print(x_train, len(x_train))
-# print("\nx_val")
-# print(x_val, len(x_val))
-
 print(x_train.shape)
+print(x_test.shape)
+print(x_val.shape)
 
 
 
