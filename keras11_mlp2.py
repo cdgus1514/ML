@@ -3,14 +3,19 @@ import numpy as np
 # 1. 학습데이터
 # x = np.array(range(1,101))
 # y = np.array(range(1,101))
-x = np.array([range(100), range(311,411), range(601,701)]).reshape(100,3)
-y = np.array([range(501, 601), range(711, 811), range(901, 1001)]).reshape(100,3)
+x = np.array([range(100), range(311,411), range(100)])
+y = np.array([range(501, 601)])
 
 print(x.shape)
 print(y.shape)
 
-# x = np.transpose(x)
-# y = np.transpose(y)
+x = np.transpose(x)
+y = np.transpose(y)
+
+
+print(x.shape)
+print(y.shape)
+
 
 
 # 데이터 분할( 6/2/2)
@@ -48,7 +53,7 @@ model.add(Dense(30))
 model.add(Dense(10))
 model.add(Dense(3000))
 model.add(Dense(5))
-model.add(Dense(3))
+model.add(Dense(1))
 
 
 # 3. 훈련
