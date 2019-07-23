@@ -4,6 +4,7 @@ import numpy as np
 x = np.array(range(1,101))
 y = np.array(range(1,101))
 
+
 x_train = x[:60]
 x_val = x[60:80]
 x_test = x[80:]
@@ -12,7 +13,7 @@ y_val = y[60:80]
 y_test = y[80:]
 
 
-
+'''
 from keras.models import Sequential
 from keras.layers import Dense
 model = Sequential()
@@ -69,3 +70,5 @@ from sklearn.metrics import r2_score
 
 r2_y_predict = r2_score(y_test, y_predict)
 print("R2 : ", r2_y_predict)
+
+'''
