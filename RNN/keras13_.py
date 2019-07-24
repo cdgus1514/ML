@@ -7,17 +7,31 @@ x = array([[1,2,3], [2,3,4], [3,4,5], [4,5,6]])
 y = array([4,5,6,7])
 
 print("x.shape : ", x.shape)
-print("y.shape : ", y.shape)
+print("y.shape : ", y.shape)    # 결과값의 개수
 
 
 # 몇개씩 작업을 할것인지 설정
-x = x.reshape((x.shape[0], x.shape[1], 1))
+x = x.reshape((x.shape[0], x.shape[1], 1))  # (4,3,1) >> (3,1)
 
-print("x.shape : ", x.shape)
+print("reshape x.shape : ", x.shape)
 
 
 # 2. 모델구성
 model = Sequential()
-model.add(LSTM(50, activation="relu", input_shape=(3,1)))
+model.add(LSTM(10, activation="relu", input_shape=(3,1)))   # 컬럼개수, 사용할 개수 >> ((n,3), 1)
 model.add(Dense(5))
 model.add(Dense(1))
+
+# model.summary()
+
+
+# 3. 실행
+model.compile(optimizer="adam", loss="mse")
+model.fit(x, y, epochs=100)
+
+
+x_input = array([6,7,8])
+x_input = x_input.reshape(1,3,1)
+
+yhat = model.predict(x_input)
+print(yhat)
