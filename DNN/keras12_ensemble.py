@@ -3,10 +3,9 @@ import numpy as np
 # 1. 학습데이터
 x1 = np.array([range(100), range(311,411), range(100)])
 y1 = np.array([range(501, 601), range(711, 811), range(100)])
+
 x2 = np.array([range(100,200), range(311,411), range(100,200)])
 y2 = np.array([range(501, 601), range(711, 811), range(100)])
-# print(x.shape)
-# print(y.shape)
 
 x1 = np.transpose(x1)
 y1 = np.transpose(y1)
@@ -29,11 +28,11 @@ x2_train, x2_test, y2_train, y2_test = train_test_split(x2, y2, random_state=66,
 x2_val, x2_test, y2_val, y2_test = train_test_split(x2_test, y2_test, random_state=66, test_size=0.5) # val 20 / test 20
 
 # print("x_test")
-# print(x_test, len(x_test))
+# print(x1_test, len(x1_test))
 # print("\nx_train")
-# print(x_train, len(x_train))
+# print(x1_train, len(x1_train))
 # print("\nx_val")
-# print(x_val, len(x_val))
+# print(x1_val, len(x1_val))
 
 # print(x1_train.shape)
 # print(x2_train.shape)
@@ -69,34 +68,32 @@ mid3 = Dense(7)(mid2)
 ### output 모델 구성
 output1 = Dense(30)(mid3)
 output1_2 = Dense(7)(output1)
-output1_3 = Dense(33)(output1_2)
+output1_3 = Dense(3)(output1_2)
 
 output2 = Dense(20)(mid3)
-output2_2 = Dense(33)(output2)
-output2_3 = Dense(7)(output2_2)
+output2_2 = Dense(7)(output2)
+output2_3 = Dense(3)(output2_2)
 
 
 model = Model(input=[input1, input2], output=[output1_3, output2_3])
-model.summary()
-'''
+# model.summary()
+
+
 # 3. 훈련
-# model.compile(loss="mse", optimizer="adam", metrics=["accuracy"])
 model.compile(loss="mse", optimizer="adam", metrics=["mse"])
-# 훈련실행(구성한 모델에 x,y 데이터를 n개씩 짤라서 n번 반복 훈련)
-# model.fit(x, y, epochs=20, batch_size=3)   # epochs >> 만들어준 모델링을 n회 반복
-                                           # batch_size >> n개씩 짤라서 연산
-model.fit(x_train, y_train, epochs=100, batch_size=1, validation_data=(x_val, y_val))
+model.fit([x1_train, x2_train], [y1_train, y2_train], epochs=10, batch_size=1, validation_data=([x1_val, x2_val], [y1_val, y2_val]))
+
 
 
 # 4. 평가예측
-loss, acc = model.evaluate(x_test, y_test, batch_size=1)
-
+# loss, acc = model.evaluate([x1_test, x2_test], [y1_test, y2_test], batch_size=1)
+acc = model.evaluate([x1_test, x2_test], [y1_test, y2_test], batch_size=1)
 print("acc : ", acc)
 
-# y값 예측 (x값 >> 훈련시킨 값, x2값 >> 훈련시킨 모델에서 나온 w값으로 새로운 데이터 결과값 예측)
-# acc(분류모델용, 근사값을 이용해 분류), predict(acc가 100%이어도 100% 정확하게 예측값이 나오지는 않음)
-y_predict = model.predict(x_test)
-print(y_predict)
+
+y1_predict, y2_predict = model.predict([x1_test, x2_test])
+print(y1_predict, y2_predict)
+
 
 
 # RMSE 구하기 (오차비교)
@@ -106,13 +103,16 @@ from sklearn.metrics import mean_squared_error
 def RMSE(y_test, y_predict):    # 결과값 :? 예측값
     return np.sqrt(mean_squared_error(y_test, y_predict))
 
-print("RMSE : ", RMSE(y_test, y_predict))
+print("y1 RMSE : ", RMSE(y1_test, y1_predict))
+print("y1 RMSE : ", RMSE(y2_test, y2_predict))
+
 
 
 # R2 구하기 (결정계수 >> 1에 가까울수록 좋음)
 from sklearn.metrics import r2_score
 
-r2_y_predict = r2_score(y_test, y_predict)
-print("R2 : ", r2_y_predict)
+r2_y1_predict = r2_score(y1_test, y1_predict)
+print("y1 R2 : ", r2_y1_predict)
 
-'''
+r2_y2_predict = r2_score(y2_test, y2_predict)
+print("y2 R2 : ", r2_y2_predict)
