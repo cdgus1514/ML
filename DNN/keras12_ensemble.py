@@ -47,7 +47,6 @@ x2_val, x2_test, y2_val, y2_test = train_test_split(x2_test, y2_test, random_sta
 # 2. 모델구성(레이어, 노드 개수 설정)
 from keras.models import Sequential, Model
 from keras.layers import Dense, Input
-model = Sequential()
 
 ## 함수형 모델 (앙상블 모델)
 input1 = Input(shape=(3,))                      # 첫번째 인풋 레이어에 shape=3
@@ -57,22 +56,29 @@ dense1_3 = Dense(10)(dense1_2)                  # input 30  >> output 10
 
 input2 = Input(shape=(3,))
 dense2 = Dense(50, activation="relu")(input2)
+dense2_2 = Dense(7)(dense2)
+
+## 모델을 하나로 합치기
+from keras.layers.merge import concatenate
+merge1 = concatenate([dense1_3, dense2_2])
+
+mid1 = Dense(10)(merge1)
+mid2 = Dense(5)(mid1)
+mid3 = Dense(7)(mid2)
+
+### output 모델 구성
+output1 = Dense(30)(mid3)
+output1_2 = Dense(7)(output1)
+output1_3 = Dense(33)(output1_2)
+
+output2 = Dense(20)(mid3)
+output2_2 = Dense(33)(output2)
+output2_3 = Dense(7)(output2_2)
 
 
-## 순차적 모델(하나의 모델만 사용가능)
-# model.add(Dense(5, input_shape=(3, ), activation="relu"))
-# model.add(Dense(3000))
-# model.add(Dense(30))
-# model.add(Dense(3000))
-# model.add(Dense(30))
-# model.add(Dense(3000))
-# model.add(Dense(30))
-# model.add(Dense(10))
-# model.add(Dense(3000))
-# model.add(Dense(5))
-# model.add(Dense(3))
-
-
+model = Model(input=[input1, input2], output=[output1_3, output2_3])
+model.summary()
+'''
 # 3. 훈련
 # model.compile(loss="mse", optimizer="adam", metrics=["accuracy"])
 model.compile(loss="mse", optimizer="adam", metrics=["mse"])
@@ -109,3 +115,4 @@ from sklearn.metrics import r2_score
 r2_y_predict = r2_score(y_test, y_predict)
 print("R2 : ", r2_y_predict)
 
+'''
