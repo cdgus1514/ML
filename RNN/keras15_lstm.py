@@ -61,3 +61,12 @@ from keras.callbacks import EarlyStopping
 early_stopping = EarlyStopping(monitor="loss", patience=30, mode="auto")
 model.compile(loss="mse", optimizer="adam", metrics=["mse"])
 model.fit(x_train, y_train, epochs=10000, batch_size=1, verbose=1, callbacks=[early_stopping])
+
+
+# 3. 평가
+loss, acc = model.evaluate(x_test, y_test)
+
+y_predict = model.predict(x_test)
+print("loss : ", loss)
+print("acc : ", acc)
+print("y_predict :", y_predict)
