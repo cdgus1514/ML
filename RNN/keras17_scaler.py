@@ -24,40 +24,35 @@ x_train = dataset[:, 0:4]
 y_train = dataset[:, 4]
 print(x_train.shape)    # (6,4)
 print(y_train.shape)    # (6, )
-print("========== x_train ==========\n",x_train)
 # print(y_train)
+
+x_test = np.array([ [[11],[12],[13],[14]], [[12],[13],[14],[15]], [[13],[14],[15],[16]], [[14],[15],[16],[17]] ])
+y_test = np.array([15,16,17,18])
 
 
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 # scaler = MinMaxScaler()
 scaler = StandardScaler()
 scaler.fit(x_train)
+print("========== x_train ==========\n",x_train)
 x_train_sc = scaler.transform(x_train)
 print("========== x_train_sc==========\n", x_train_sc)
-
-
-x_train = np.reshape(x_train, (6,4,1))
+x_train_sc = np.reshape(x_train_sc, (6,4,1))
 print("========== x_train_sc shape ==========\n", x_train_sc.shape)    # (6, 4, 1)
 
-
-
-
-x_test = np.array([[[11],[12],[13],[14]], [[12],[13],[14],[15]], [[13],[14],[15],[16]], [[14],[15],[16],[17]]])
-y_test = np.array([15,16,17,18])
+print("----------------------------------------------------------")
+x_test = np.reshape(x_test, (4,4))
 print("\n========== x_test ==========\n", x_test)
-
-
 x_test_sc = scaler.transform(x_test)
 print("========== x_test_sc ==========\n", x_test_sc)
 
-
-
+x_test_sc = np.reshape(x_test_sc, (4,4,1))
 print(x_test.shape) # (4,4,1)
 # print(y_test.shape) # (4, )
 
 
 
-'''
+
 # 1. 모델구성
 model = Sequential()
 model.add(LSTM(32, input_shape=(4,1), return_sequences=True))
@@ -91,4 +86,3 @@ print("loss : ", loss)
 print("acc : ", acc)
 print("y_predict :", y_predict)
 
-'''
