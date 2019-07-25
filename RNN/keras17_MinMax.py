@@ -2,12 +2,14 @@ from numpy import array
 from keras.models import Sequential
 from keras.layers import Dense, LSTM
 
-# 1. 데이터 >> 데이터가 한쪽에 쏠려있으면 standard
+# 1. 데이터
 x = array([[1,2,3], [2,3,4], [3,4,5], [4,5,6], [5,6,7], [6,7,8], [7,8,9], [8,9,10], [9,10,11], [10,11,12], [20,30,40], [30,40,50], [40,50,60]])
 y = array([4,5,6,7,8,9,10,11,12,13,50,60,70])
 
+##  데이터가 한쪽에 쏠려있으면 Standard >> 전체 데이터에서 훈련데이터셋만 전처리+변환, 나머지는 변환
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
-scaler = StandardScaler()
+# scaler = StandardScaler()
+scaler = MinMaxScaler()
 scaler.fit(x)
 x = scaler.transform(x)
 print(x)
