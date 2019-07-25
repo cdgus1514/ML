@@ -46,9 +46,9 @@ model.add(Dense(1))
 # 3. 실행
 model.compile(optimizer="adam", loss="mse")
 
-## earlystopping
+## earlystopping >> epochs 제한 필요없음
 from keras.callbacks import EarlyStopping
-early_stopping = EarlyStopping(monitor="loss", patient=30, mode="auto")
+early_stopping = EarlyStopping(monitor="loss", patience=30, mode="auto")
 hist = model.fit(x, y, epochs=10000, verbose=1, callbacks=[early_stopping])
 
 
