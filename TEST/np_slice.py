@@ -30,3 +30,29 @@ d = np.array(list)
 b_arr = np.array([ [False, True, False], [True, False, True], [False, True, False] ])
 res = d[b_arr]
 print(res)
+
+
+
+
+
+
+
+
+
+
+print("\n\n\n######################################## 차원변환 ########################################")
+# list = [ [1,2,3], [4,5,6], [7,8,9], [10,11,12]]
+test = np.linspace(1, 100, num=100)
+
+print("\n\n###### 차원 변경 전 ######\n", test.shape)
+print("###### test ######\n", test)                        # (100, )
+
+
+test2 = test.reshape(4 ,25)
+print("\n\n###### 2차원 변경 후 ######\n", test2.shape)
+print("###### test2 ######\n", test2)                      # (4,25)
+
+
+test3 = test2.reshape(4, 5, 5)
+print("\n\n###### 3차원 변경 후 ######\n", test3.shape)
+print("###### test3 ######\n", test3)                      # (4,5,5)
