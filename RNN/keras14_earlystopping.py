@@ -45,7 +45,7 @@ model.compile(loss="mse", optimizer="adam", metrics=["mse"])
 
 from keras.callbacks import EarlyStopping
 
-early_stopping = EarlyStopping(monitor="loss", patience=100, mode="auto")
+early_stopping = EarlyStopping(monitor="val_loss", patience=100, mode="auto")
 hist = model.fit(x_train, y_train, epochs=10000, verbose=1, callbacks=[early_stopping])
 # hits = model.fit(x_train, y_train, epochs=100, batch_size=1, validation_data=(x_val, y_val))
 
