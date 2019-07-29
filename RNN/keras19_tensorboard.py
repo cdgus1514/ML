@@ -49,6 +49,7 @@ model.add(Dense(1))
 
 
 
+
 ## 3. 훈련
 model.compile(loss="mse", optimizer="adam", metrics=["accuracy"])
 
