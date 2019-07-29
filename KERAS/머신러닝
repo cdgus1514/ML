@@ -1,0 +1,75 @@
+# 머신러닝 모델 
+- 회귀모델 >> 출력 값 예측 (compile(loss)=mse, model(activation)=relu)
+- 분류모델 >> 지정된 값으로 출력 (compile(loss)=categorical, model(activation)=softmax)
+* mse >> 오차제곱
+* categorical
+* relu >> 
+* softmax >> 각 요소의 값이 0 ~ 1 사이, 합= 1
+
+# 케라스 이미지 불러오기 >> keras.processing.image.load_img
+img = image.load_img(“xxx.jpg”, target_size(100, 100))
+img
+
+- target_size >> 불러올 이미지의 픽셀단위로 설정
+
+# 불러온 이미지 numpy 배열에 저장
+img = image.img_to_array(img)	# (100, 100, 3)
+>> 컬러 이미지이므로 컬러 채널의 크기=3
+
+# 케라스, 텐서플로에서 이미지 데이터를 다루기 위해서는 4차원 구조 필요 (이미지데이터=3dim)
+4차원 텐서 >> (samples, rows, cols, channels)
+rows(너비), cols(높이), channels(RGB채널)
+samples(Mini-batch SGD를 위한 전체 학습데이터에서 랜덤 샘플링을 통한 미니배치를 만들기 위한 크기 설정 값)
+
+ 
+# CNN padding
+- 이미지 데이터 컷팅 후 이미지 데이터 유실(drop) 방지
+ 
+
+# Maxpooling
+- 불필요한 이미지 데이터 제거 (몇 개씩 자를 것 인지)
+- (10, 10) >> (3, 3) cut → (3, 3) and (1, 1) Drop
+- maxpooling 후 다음 모델의 shape보다 작으면 에러발생 (크거나 같아야 함)
+
+# np_utils.to_categorical >> OneHot encoding (True 1개, 나머지 False)
+(60000, ) → (60000, 10)
+7 : 0000000100
+5 : 0000010000 >> 10개 데이터
+
+
+
+# 머신러닝 정규화
+
+- 과적합(Overfitting) 문제를 극복할 방법으로 정규화 사용
+
+* Overfitting >> 머신러닝 학습과정에서 데이터를 과하게 학습
+                 학습데이터는 실제데이터의 부분집합이므로, 학습데이터에 대한 오차는 감소하지만 실제 데이터에대해 오차가 증가
+
+
+## Overffit 해결 방법
+>> Regularization 사용
+>> 큰 데이터 사용
+>> 노드를 줄인다 (Drop-Out)
+
+
+## Normalization(정규화), Standardization(표준화)
+
+- 값의 범위(scale)를 축소하는 re-scaling 과정 
+
+>> scale의 범위가 너무 크면 노이즈 데이터가 생성되거나 overfitting이 될 가능성이 높아짐
+>> 값이 너무 커지게 되므로 활성화 함수를 거친다고 하여도 한쪽으로 값이 쏠릴 가능성이 높기 때문
+>> scale이 너무 커서 값의 분포 범위가 넓으면 값을 정하기 힘들어집니다.
+
+>> Normalization → MinMaxScaler
+>> Standardiztion → StandardScaler
+
+
+## Regularization(일반화/정칙화)
+
+- 모델의 일반화 오류를 줄여 과적합을 방지하는 기법
+- 문제해결을 위해 데이터를 채에 걸른 후 걸러진 것들 중에 답을 찾는 것
+- 모델을 복잡하거나 유연하게 만드는 과정
+
+>> Overfitting은 모델이 train data에 너무 딱 맞게 학습이 돼서 발생하는 문제 → 특정 penalty 값(w/cost)만 더해주거나 빼주어서 모델의 복잡도를 조정
+>> 주로 하이퍼파라미터를 수정
+
