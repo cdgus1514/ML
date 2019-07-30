@@ -15,7 +15,6 @@ import matplotlib.pyplot as plt
 # digit = X_train[88]
 # plt.show(digit, cmap=plt.cm.binary)
 # plt.show()
-
 X_train = X_train.reshape(X_train.shape[0], 28,28,1).astype("float32")/255  # (60000, 28,28) >> (60000, 28, 28, 1)
 X_test = X_test.reshape(X_test.shape[0], 28,28,1).astype("float32")/255     # 1픽셀에 255 /255 >> 전처리 실행
 print(Y_train.shape)    # (60000, )
@@ -56,11 +55,43 @@ early_stopping_callback = EarlyStopping(monitor="val_loss", patience=10)    # �
 
 
 # 모델 실행
-history = model.fit(X_train, Y_train, validation_data=(X_test, Y_test), epochs=30, batch_size=200, verbose=1, callbacks=[early_stopping_callback])
+history = model.fit(X_train, Y_train, validation_data=(X_test, Y_test), epochs=5, batch_size=200, verbose=1, callbacks=[early_stopping_callback])
 
 
 
 # 테스트 정확성
 ## 분류모델은 accuracy 사용
 print("\nTest Accuracy : %.4f" % (model.evaluate(X_test, Y_test)[1]))
+
+print(history.history.keys()) # dict_keys(['val_loss', 'val_acc', 'loss', 'acc'])
+
+
+import matplotlib.pyplot as plt
+plt.plot(history.history["acc"])
+plt.plot(history.history["val_acc"])
+plt.title("model accuracy")
+plt.ylabel("accuracy")
+plt.xlabel("epoch")
+plt.legend(["train", "test"], loc="upper left")
+plt.show()
+
+
+plt.plot(history.history["loss"])
+plt.plot(history.history["val_loss"])
+plt.title("model loss")
+plt.ylabel("loss")
+plt.xlabel("epoch")
+plt.legend(["train", "test"], loc="upper left")
+plt.show()
+
+
+plt.plot(history.history["loss"])
+plt.plot(history.history["val_loss"])
+plt.plot(history.history["acc"])
+plt.plot(history.history["val_acc"])
+plt.title("model loss, accuracy")
+plt.ylabel("loss, acc")
+plt.xlabel("epochs")
+plt.legend(["train loss", "test loss", "train acc", "test acc"], loc="upper left")
+plt.show()
 
