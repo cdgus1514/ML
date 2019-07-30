@@ -6,7 +6,6 @@ from keras.layers import BatchNormalization
 from keras.layers.convolutional import Conv2D, MaxPooling2D
 from keras.optimizers import SGD, Adam, RMSprop
 from keras.callbacks import EarlyStopping
-from keras import regularizers
 import matplotlib.pyplot as plt
 
 # minmax 정규화, standard표준화
@@ -48,8 +47,10 @@ X_test = X_test.astype("float32")
 
 X_train_reshape = X_train.reshape(50000, 3072)
 X_test_reshape = X_test.reshape(10000, 3072)
+
 sclaer = MinMaxScaler()
 sclaer.fit(X_train)
+
 X_train_reshape = sclaer.transform(X_train_reshape)
 X_test_reshape = sclaer.transform(X_test_reshape)
 X_train_reshape = X_train_reshape.reshape(50000, 32, 32, 3)
@@ -57,31 +58,34 @@ X_test_reshape = X_test_reshape.reshape(10000, 32, 32, 3)
 
 
 # 신경망 정의
-w = 1e-4
-
 model = Sequential()
-model.add(Conv2D(32, (3,3), padding="same", kernel_regularizer=regularizers.l2(w), input_shape=(IMG_ROWS, IMG_CLOS, IMG_CHANNELS)))
+model.add(Dense(512, Activation="relu", input_shape=(32*32,)))
+model.add(Dense(512, Activation="relu"))
 model.add(BatchNormalization())
-model.add(Conv2D(32, (3,3), padding="same", kernel_regularizer=regularizers.l2(w)))
+model.add(Dense(1024, Activation="relu"))
+model.add(Dense(1024, Activation="relu"))
 model.add(BatchNormalization())
+model.add(Dense(10, Activation="softmax"))
+
+'''
+model = Sequential()
+model.add(Conv2D(32, (3,3), padding="same", input_shape=(IMG_ROWS, IMG_CLOS, IMG_CHANNELS)))
+model.add(Conv2D(64, (3,3), padding="same"))
 model.add(Activation("relu"))
 model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Dropout(0.5))
 
-model.add(Conv2D(128, (3,3), padding="same", kernel_regularizer=regularizers.l2(w)))
-model.add(BatchNormalization())
 model.add(Conv2D(128, (3,3), padding="same"))
-model.add(BatchNormalization())
+model.add(Conv2D(256, (3,3), padding="same"))
 model.add(Activation("relu"))
 model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Dropout(0.5))
 
 model.add(Conv2D(512, (3,3), padding="same"))
-model.add(BatchNormalization())
-model.add(Conv2D(512, (3,3), padding="same"))
-model.add(BatchNormalization())
+model.add(Conv2D(1024, (3,3), padding="same"))
 model.add(Activation("relu"))
 model.add(MaxPooling2D(pool_size=(2,2)))
+# model.add(BatchNormalization())
 model.add(Dropout(0.25))
 
 model.add(Flatten())
@@ -92,7 +96,7 @@ model.add(Dense(NB_CLASSES))
 model.add(Activation("softmax"))
 
 # model.summary()
-
+'''
 
 
 # 학습
