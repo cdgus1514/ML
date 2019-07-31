@@ -54,6 +54,7 @@ model.add(Dense(1))
 model.compile(loss="mse", optimizer="adam", metrics=["accuracy"])
 
 import keras
+# tensorboard --logdir=./graph
 tb_hist = keras.callbacks.TensorBoard(log_dir="./graph", histogram_freq=0, write_graph=True, write_images=True)
 
 from keras.callbacks import EarlyStopping

@@ -71,7 +71,6 @@ model.add(Dense(1))
 model.compile(loss="mse", optimizer="adam", metrics=["mse"])
 
 ## Tensorboard
-import keras
 tb_hist = keras.callbacks.TensorBoard(log_dir="./graph", histogram_freq=0, write_graph=True, write_images=True)
 
 ## EarlyStopping 적용
@@ -81,8 +80,8 @@ early_stopping_callback = EarlyStopping(monitor="val_loss", patience=10)    # �
 num_epochs = 50
 for epoch_idx in range(num_epochs):
     print("epoch : " +str(epoch_idx))
-    # model.fit(x_train, y_train, epochs=1, batch_size=Batch_size, verbose=2, shuffle=False, validation_data=(x_test, y_test), callbacks=[early_stopping_callback])    # num_epoch(50) * epochs(1) = 50회 반복 
-    model.fit(x_train, y_train, epochs=1, batch_size=Batch_size, verbose=2, shuffle=False, validation_data=(x_test, y_test))
+    ## num_epoch(50) * epochs(1) = 50회 반복 
+    model.fit(x_train, y_train, epochs=1, batch_size=Batch_size, verbose=2, shuffle=False, validation_data=(x_test, y_test), callbacks=[early_stopping_callback, tb_hist])
     ## 상태유지를 적용하는 경우에는 실행, 예측 후 현재상태를 리셋해야함 >> 값 변경 X
     model.reset_states()
 
