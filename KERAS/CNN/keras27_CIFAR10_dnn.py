@@ -49,13 +49,14 @@ X_train_reshape = X_train.reshape(50000, 3072)
 X_test_reshape = X_test.reshape(10000, 3072)
 
 sclaer = MinMaxScaler()
-sclaer.fit(X_train)
+sclaer.fit(X_train_reshape)
 
 X_train_reshape = sclaer.transform(X_train_reshape)
 X_test_reshape = sclaer.transform(X_test_reshape)
-X_train_reshape = X_train_reshape.reshape(50000, 32, 32, 3)
-X_test_reshape = X_test_reshape.reshape(10000, 32, 32, 3)
 
+print(X_train_reshape.shape)
+print(X_test_reshape.shape)
+print(Y_train.shape)
 
 # 신경망 정의
 model = Sequential()
@@ -105,7 +106,7 @@ model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accur
 
 early_stopping_callback = EarlyStopping(monitor="val_loss", patience=20)    # 변화값이 patience이상 변경 없을경우 중지
 
-history = model.fit(X_train, Y_train, batch_size=BATCH_SIZE, epochs=NB_EPOCH, validation_split=VALIDATION_SPLIT, verbose=VERBOSE, callbacks=[early_stopping_callback])
+history = model.fit(X_train_reshape, Y_train, batch_size=BATCH_SIZE, epochs=NB_EPOCH, validation_split=VALIDATION_SPLIT, verbose=VERBOSE, callbacks=[early_stopping_callback])
 
 print("Testing...")
 

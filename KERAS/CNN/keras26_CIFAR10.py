@@ -57,18 +57,16 @@ X_test_reshape = X_test_reshape.reshape(10000, 32, 32, 3)
 
 
 # 신경망 정의
-w = 1e-4
-
 model = Sequential()
-model.add(Conv2D(32, (3,3), padding="same", kernel_regularizer=regularizers.l2(w), input_shape=(IMG_ROWS, IMG_CLOS, IMG_CHANNELS)))
+model.add(Conv2D(32, (3,3), padding="same", input_shape=(IMG_ROWS, IMG_CLOS, IMG_CHANNELS)))
 model.add(BatchNormalization())
-model.add(Conv2D(32, (3,3), padding="same", kernel_regularizer=regularizers.l2(w)))
+model.add(Conv2D(32, (3,3), padding="same"))
 model.add(BatchNormalization())
 model.add(Activation("relu"))
 model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Dropout(0.5))
 
-model.add(Conv2D(128, (3,3), padding="same", kernel_regularizer=regularizers.l2(w)))
+model.add(Conv2D(128, (3,3), padding="same"))
 model.add(BatchNormalization())
 model.add(Conv2D(128, (3,3), padding="same"))
 model.add(BatchNormalization())
