@@ -6,15 +6,21 @@ from keras.layers import Dense, LSTM
 x = array([[1,2,3], [2,3,4], [3,4,5], [4,5,6]])
 y = array([4,5,6,7])
 
-print("x.shape : ", x.shape)
-print("y.shape : ", y.shape)    # 결과값의 개수
+print("x.shape : ", x.shape)    # (4,3)
+print("y.shape : ", y.shape)    # (4,)
 
 
-# 몇개씩 작업을 할것인지 설정
-x = x.reshape((x.shape[0], x.shape[1], 1))  # (4,3,1) >> (3,1)
+## debug ###
+print("x shape[0] >> ", x.shape[0]) # 4
+print("x shape[1] >> ", x.shape[1]) # 3
 
+
+# LSTM >> 몇개씩 잘라서 작업 할 것인지
+x = x.reshape((x.shape[0], x.shape[1], 1))  # (4,3) >> (4,3,1)
 print("reshape x.shape : ", x.shape)
 
+
+'''
 
 # 2. 모델구성
 model = Sequential()
@@ -113,3 +119,5 @@ x_input = x_input.reshape(1,3,1)
 
 yhat = model.predict(x_input)
 print(yhat)
+
+'''

@@ -3,10 +3,9 @@ from keras.models import Sequential
 from keras.layers import Dense, LSTM
 
 a = np.array(range(1,11))
-
 size = 5
 
-# 연속적인 데이터셋 만들기
+# 1. 연속적인 데이터셋 만들기
 def split_5(seq, size):
     aaa = []
     for i in range(len(a) - size + 1):
@@ -36,8 +35,8 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler
 scaler = StandardScaler()
 scaler.fit(x_train)
 x_train_sc = scaler.transform(x_train)
-print("========== x_train ==========\n",x_train)
-print("========== x_train_sc==========\n", x_train_sc)
+print("x_train >> ",x_train)
+print("x_train_sc >> ", x_train_sc)
 
 ## 훈련데이터셋 차원변경
 x_train_sc = np.reshape(x_train_sc, (6,4,1))
@@ -57,7 +56,7 @@ y_test = y_test.shape # (4, )
 
 
 '''
-# 1. 모델구성
+# 2. 모델구성
 model = Sequential()
 model.add(LSTM(32, input_shape=(4,1), return_sequences=True))
 model.add(LSTM(10, return_sequences=True))
@@ -77,14 +76,14 @@ model.add(Dense(1))
 
 
 
-# 2. 훈련
+# 3. 훈련
 from keras.callbacks import EarlyStopping
 early_stopping = EarlyStopping(monitor="loss", patience=30, mode="auto")
 model.compile(loss="mse", optimizer="adam", metrics=["mse"])
 model.fit(x_train_sc, y_train, epochs=10000, batch_size=1, verbose=1, callbacks=[early_stopping])
 
 
-# 3. 평가
+# 4. 평가
 loss, acc = model.evaluate(x_test_sc, y_test)
 
 y_predict = model.predict(x_test_sc)

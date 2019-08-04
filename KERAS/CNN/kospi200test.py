@@ -12,7 +12,7 @@ df = pd.read_csv("/content/kospi200test.csv", sep=",", engine="python")
 
 print("## 데이터 확인 ##")
 print(df.head(5))
-print("original shape : ", df.shape)
+print("original shape : ", df.shape)  #(600,7)
 
 print("================================================")
 
@@ -23,13 +23,13 @@ dataset_temp = dataset_temp.as_matrix()
 
 # 내림차순 정렬
 new_dataset = []
-col_count = (len(dataset_temp)) # (599)
+col_count = (len(dataset_temp))
 
 for i in range(col_count-1, -1, -1):
   new_dataset.append(dataset_temp[i])
   
 new_dataset_temp = np.array(new_dataset)
-print("new_dataset_temp shape : ", new_dataset_temp.shape)
+print("new_dataset_temp shape : ", new_dataset_temp.shape)  # (600,4)
 
 
 ## 종가 데이터셋 분리
@@ -38,16 +38,16 @@ for i in range(col_count):
   close.append(new_dataset_temp[i][3])
 
 close = np.array(close)
-# print("close shape : ", close.shape)
+print("close shape : ", close.shape)
 close = np.reshape(close, (col_count,1))
-# print("close reshape : ", close.shape)
+print("close reshape : ", close.shape)
 
 print(new_dataset_temp)
 
 
 
 ## 데이터셋 스케일링
-scaler = MinMaxScaler()
+scaler = MinMaxScaler(feature_range=(0,1))
 scaler.fit(new_dataset_temp)
 dataset_sc = scaler.transform(new_dataset_temp)
 
@@ -91,15 +91,16 @@ model = Sequential()
 # model.add(Dropout(0.5))
 
 
+
 # model.add(Dense(30, activation="relu", input_shape=(5,)))
 model.add(Dense(30, activation="relu", input_shape=(4,)))
 
-for i in range(5):
-  model.add(Dense(300))
+for i in range(3):
+  model.add(Dense(30))
   model.add(Dense(45))
-  model.add(Dense(70))  
+  model.add(Dense(70))
   model.add(Dense(30))
-  model.add(Dense(30))
+  model.add(Dense(10))
 
 
 model.add(Dense(1))
@@ -111,7 +112,7 @@ model.compile(loss="mse", optimizer="adam", metrics=["accuracy"])
 
 
 ## EarlyStopping 적용
-early_stopping_callback = EarlyStopping(monitor="val_loss", patience=10)
+early_stopping_callback = EarlyStopping(monitor="val_loss", patience=10, mode="auto")
 
 
 
@@ -131,6 +132,8 @@ print("acc >> ", acc)
 y_predict = model.predict(X_test)
 # print(len(y_predict))#180
 print("predict >> ", y_predict[179])
+# print("predict >> ", y_predict[119])
+
 
 
 from sklearn.metrics import r2_score
