@@ -11,7 +11,7 @@ def bulid_network(num_gpu=1, input_shape=None):
     batch1 = BatchNormalization(name="batch_norm_1")(conv1)
     pool1 = MaxPooling2D(pool_size=(2,2), name="pool_1")(batch1)
 
-    # 합성공 블럭2
+    # 합성곱 블럭2
     conv2 = Conv2D(32, kernel_size=(3,3), activation="relu", name="conv_1")(pool1)
     batch2 = BatchNormalization(name="batch_norm_2")(conv2)
     pool2 = MaxPooling2D(pool_size=(2,2), name="pool_2")(batch2)
