@@ -43,19 +43,6 @@ def bulid_model(keep_prob=0.2, optimizer="adam"):
 
     return model
 
-# def bulid_model(optimizer = 'adam', keep_prob = 0.2):
-#     model = Sequential()
-#     model.add(Dense(128, input_dim= 30, activation = 'relu'))
-#     # model.add(LSTM(64, input_shape= input_size, activation = 'relu'))
-#     model.add(Dropout(keep_prob))
-#     model.add(Dense(32))
-#     model.add(Dropout(keep_prob))
-#     model.add(Dense(32))
-#     model.add(Dropout(keep_prob))
-#     model.add(Dense(1, activation='sigmoid'))
-#     model.compile(loss = 'binary_crossentropy', optimizer = optimizer, metrics=['accuracy'])
-#     return model
-
 
 
 
@@ -86,4 +73,4 @@ print(search.best_params_)
 
 from sklearn.metrics import accuracy_score
 y_pred = search.predict(x_test)
-print('>> 최종 정답률:', accuracy_score(y_test, y_pred))
+print('정답률 >> ', accuracy_score(y_test, y_pred))

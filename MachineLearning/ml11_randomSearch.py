@@ -11,8 +11,8 @@ from sklearn.model_selection import RandomizedSearchCV
 
 
 # 1. 데이터 로드
-iris_data = pd.read_csv("C:/Users/CDH/Downloads/Data/iris2.csv", encoding="utf-8")
-# iris_data = pd.read_csv("/content/iris2.csv", encoding="utf-8")
+# iris_data = pd.read_csv("C:/Users/CDH/Downloads/Data/iris2.csv", encoding="utf-8")
+iris_data = pd.read_csv("/content/iris2.csv", encoding="utf-8")
 
 
 ## 레이블, 데이터 분리
@@ -24,20 +24,20 @@ x = iris_data.loc[:, ["SepalLength", "SepalWidth", "PetalLength", "PetalWidth"]]
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, shuffle=True)
 
 
-## 그리드서치 매개변수
-# parameters = [
-#     {"C":[1,10,100,1000], "kernel":["linear"]},
-#     {"C":[1,10,100,1000], "kernel":["rbf"], "gamma":[0.001, 0.0001]},
-#     {"C":[1,10,100,1000], "kernel":["sigmoid"], "gamma":[0.001, 0.0001]}
-# ]
+# 그리드서치 매개변수
+parameters = {
+    "C":[1,10,100,1000],
+    "kernel":["linear", "rbf", "sigmoid"],
+    "gamma":[0.001, 0.0001],
+}
 
-def parm():
-    C = [1,10,100,1000]
-    kernel = ['linear', 'rbf', 'sigmoid']
-    gamma = [0.001, 0.0001]
-    return{"C":C, "kernel":kernel, "gamma":gamma}
+# def parm():
+#     C = [1,10,100,1000]
+#     kernel = ['linear', 'rbf', 'sigmoid']
+#     gamma = [0.001, 0.0001]
+#     return{"C":C, "kernel":kernel, "gamma":gamma}
 
-parameters = parm()
+# parameters = parm()
 
 
 ## 그리드서치
