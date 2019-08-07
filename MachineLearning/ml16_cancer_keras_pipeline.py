@@ -26,55 +26,60 @@ print("y_test shape >> ", y_test.shape)     # (114,)
 
 
 ## 모델
-def bulid_model(keep_prob=0.5, optimizer="adam"):
+def bulid_model(keep_prob=0.2, optimizer="adam"):
     model = Sequential()
 
-    model.add(Dense(64, activation="relu", input_shape=(30,)))
-    model.add(Dense(64, activation="relu"))
+    model.add(Dense(128, input_dim=30, activation="relu"))
     model.add(Dropout(keep_prob))
-    model.add(Dense(2, activation="softmax"))
+    model.add(Dense(32))
+    model.add(Dropout(keep_prob))
+    model.add(Dense(32))
+    model.add(Dropout(keep_prob))
+    # model.add(Dense(2, activation="softmax"))
+    model.add(Dense(1, activation="sigmoid"))
 
-    model.compile(optimizer=optimizer, loss="categorical_crossentropy", metrics=["accuracy"])
+    # model.compile(optimizer=optimizer, loss="categorical_crossentropy", metrics=["accuracy"])
+    model.compile(optimizer=optimizer, loss="binary_crossentropy", metrics=["accuracy"])
 
     return model
 
+# def bulid_model(optimizer = 'adam', keep_prob = 0.2):
+#     model = Sequential()
+#     model.add(Dense(128, input_dim= 30, activation = 'relu'))
+#     # model.add(LSTM(64, input_shape= input_size, activation = 'relu'))
+#     model.add(Dropout(keep_prob))
+#     model.add(Dense(32))
+#     model.add(Dropout(keep_prob))
+#     model.add(Dense(32))
+#     model.add(Dropout(keep_prob))
+#     model.add(Dense(1, activation='sigmoid'))
+#     model.compile(loss = 'binary_crossentropy', optimizer = optimizer, metrics=['accuracy'])
+#     return model
 
-# ## 하이퍼파라미터
-# def create_hyperparameters():
-#     batches = [10,20,30,40,50]
-#     optimizer = ['rmsprop', 'adam', 'adadelta']
-#     dropout = np.linspace(0.1, 0.5, 5)
-#     return{"batch_size":batches, "optimizer":optimizer, "keep_prob":dropout}
 
 
-prameter = {
-    "model__batch_size": [10,20,30,40,50],
-    "model__optimizer": ["adam", "adadelta", "rmsprop"],
-    "model__keep_prob": [0.1, 0.5, 5]
-}
 
 ## 튜닝
 from keras.wrappers.scikit_learn import KerasClassifier
-model = KerasClassifier(build_fn=bulid_model, verbose=1)
-
-# hyperparameters = create_hyperparameters()
-
-
+from sklearn.model_selection import RandomizedSearchCV
+from sklearn.model_selection import KFold
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import MinMaxScaler
 
-pipe = Pipeline([("scaler", MinMaxScaler()), ("model", model)])
-# pipe.fit(x_train, y_train)
-# print("테스트 점수 >> ", pipe.score(x_test, y_test))
-
-
-
-from sklearn.model_selection import RandomizedSearchCV
-from sklearn.model_selection import KFold
 
 kfold_cv = KFold(n_splits=5, shuffle=True)
-search = RandomizedSearchCV(pipe, prameter, cv=kfold_cv)
+model = KerasClassifier(build_fn=bulid_model)
 
+prameter = {
+    "model__batch_size": [5,15,25,35,55],
+    "model__optimizer": ["adam", "adadelta", "rmsprop"],
+    "model__keep_prob": [0, 0.2, 0.25, 0.5],
+    "model__epochs": [100, 200, 500]
+}
+
+pipe = Pipeline([("scaler", MinMaxScaler()), ("model", model)])
+
+search = RandomizedSearchCV(pipe, prameter, cv=kfold_cv)
 search.fit(x_train, y_train)
 
 print(search.best_params_)
