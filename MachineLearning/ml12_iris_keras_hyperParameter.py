@@ -9,7 +9,6 @@ from keras.utils import to_categorical
 
 
 ## 데이터 로드
-# dataset = numpy.loadtxt("./data/pima-indians-diabetes.csv", delimiter=",")
 iris_data = pd.read_csv("/content/iris.csv", names=["SepalLenght", "SepalWidth", "PetalLenght", "petalWidth", "Name"], encoding="utf-8")
 # print("iris shape >> ", iris_data.shape)    #(150,5)
 print(iris_data["Name"].unique())
@@ -38,41 +37,47 @@ print("x_test shape >> ", x_test.shape)     # (30,4)
 print("y_test shape >> ", y_test.shape)     # (30,3)
 
 
+## 모델
+def bulid_model(keep_prob=0.5, optimizer="adam"):
+    model = Sequential()
 
-## 모델구성
-model = Sequential()
-model.add(Dense(64, activation="relu", input_shape=(4,)))
-model.add(Dense(64, activation="relu"))
-model.add(Dense(3, activation="softmax"))
+    model = Sequential()
+    model.add(Dense(64, activation="relu", input_shape=(4,)))
+    model.add(Dense(64, activation="relu"))
+    model.add(Dropout(keep_prob))
+    model.add(Dense(3, activation="softmax"))
 
-model.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"])
+    model.compile(optimizer=optimizer, loss="categorical_crossentropy", metrics=["accuracy"])
 
-# y_train = to_categorical(y_train)
-# y_test = to_categorical(y_test)
-
-
-
-## 모델실행
-# model.fit(x_train, y_train, epochs=100, batch_size=10)
-hist = model.fit(x_train, y_train, epochs=100, validation_data=(x_test, y_test), batch_size=10)
+    return model
 
 
+## 하이퍼파라미터
+def create_hyperparameters():
+    batches = [10,20,30,40,50]
+    optimizer = ['rmsprop', 'adam', 'adadelta']
+    dropout = np.linspace(0.1, 0.5, 5)
+    return{"batch_size":batches, "optimizer":optimizer, "keep_prob":dropout}
 
 
-## 모델평가
-acc, loss = model.evaluate(x_test, y_test)
-print("acc >> ", acc)
-print("loss >> ", loss)
 
+## 튜닝
+from keras.wrappers.scikit_learn import KerasClassifier
+model = KerasClassifier(build_fn=bulid_model, verbose=1)
 
-import matplotlib.pyplot as plt
+hyperparameters = create_hyperparameters()
 
-plt.figure(figsize=(12,8))
-plt.plot(hist.history["loss"])
-plt.plot(hist.history["val_loss"])
-plt.plot(hist.history["acc"])
-plt.plot(hist.history["val_acc"])
-plt.grid(True)
-plt.legend(["loss", "val_loss", "acc", "val_acc"])
+from sklearn.model_selection import RandomizedSearchCV
+from sklearn.model_selection import KFold
 
-plt.show
+kfold_cv = KFold(n_splits=5, shuffle=True)
+search = RandomizedSearchCV(model, hyperparameters, cv=kfold_cv)
+
+search.fit(x_train, y_train)
+
+print(search.best_params_)
+
+'''
+# result
+
+'''

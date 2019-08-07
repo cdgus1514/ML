@@ -27,6 +27,7 @@ allAlgorithms = all_estimators(type_filter="classifier")
 
 ## K-분할 크로스 발리데이션 전용 객체
 kfold_cv = KFold(n_splits=10, shuffle=True)  # 3-10
+num = []
 
 for(name, algorithm) in allAlgorithms:
     #각 알고리즘 객체 생성
@@ -39,8 +40,10 @@ for(name, algorithm) in allAlgorithms:
         scores = cross_val_score(clf, x, y, cv=kfold_cv)
         print(name,"의 정답률 >> ")
         # print(scores)
+        
         s = np.array(scores)
         avg = np.mean(s)
+        num.append(s)
         print(avg)
 
 
