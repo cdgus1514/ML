@@ -38,7 +38,7 @@ test_x, test_y = make_data(df[test_year])
 ## 직선 회귀 분석
 lr = LinearRegression(normalize=True)
 lr.fit(train_x, train_y)            #학습
-pre_y = lr.predict(test_x)  #예측
+pre_y = lr.predict(test_x)          #예측
 
 score = lr.score(test_x, pre_y)
 print("score >> ", score)
