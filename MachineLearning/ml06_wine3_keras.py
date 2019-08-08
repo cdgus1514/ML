@@ -89,3 +89,8 @@ print("acc >> ", acc)
 # count_data.plot()
 # plt.savefig("wine-count-plt.png")
 # plt.show()
+
+
+# 튜닝 전
+# loss >>  0.24681154513845638
+# acc >>  0.9377551017975321

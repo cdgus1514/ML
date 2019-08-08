@@ -40,29 +40,59 @@ print("y_test shape >> ", y_test.shape)     # (30,3)
 
 
 ## 모델구성
-model = Sequential()
-model.add(Dense(64, activation="relu", input_shape=(4,)))
-model.add(Dense(64, activation="relu"))
-model.add(Dense(3, activation="softmax"))
+def bulid_model(optimizer="adam", drop=0.2):
+    model = Sequential()
+    model.add(Dense(64, activation="relu", input_shape=(4,)))
+    model.add(Dense(64, activation="relu"))
+    model.add(Dense(3, activation="softmax"))
 
-model.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"])
+    model.compile(optimizer=optimizer, loss="categorical_crossentropy", metrics=["accuracy"])
 
-# y_train = to_categorical(y_train)
-# y_test = to_categorical(y_test)
-
-
-
-## 모델실행
-# model.fit(x_train, y_train, epochs=100, batch_size=10)
-hist = model.fit(x_train, y_train, epochs=100, validation_data=(x_test, y_test), batch_size=10)
+    return model
 
 
 
 
-## 모델평가
-loss, acc = model.evaluate(x_test, y_test)
-print("loss >> ", loss)
-print("acc >> ", acc)
+## 튜닝
+from keras.wrappers.scikit_learn import KerasClassifier
+from sklearn.model_selection import RandomizedSearchCV
+from sklearn.model_selection import KFold
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import MinMaxScaler
+
+k_cv = KFold(n_splits=6, shuffle=True)
+model = KerasClassifier(build_fn=bulid_model)
+
+
+parameters = {
+    "model__batch_size": [5,15,55],
+    "model__optimizer": ["adam", "adadelta", "rmsprop"],
+    "model__drop": [0, 0.2, 0.5],
+    "model__epochs": [100, 200]
+}
+
+
+pipe = Pipeline([
+    ("scaler", MinMaxScaler()), ("model", model)
+])
+
+
+search = RandomizedSearchCV(pipe, parameters, cv=k_cv)
+search.fit(x_train, y_train)
+print(search.best_params_)
+
+from sklearn.metrics import accuracy_score
+y_pred = search.predict(x_test)
+print('정답률 >> ', accuracy_score(y_test, y_pred))
+
+
+# ## 모델평가
+# acc, loss = model.evaluate(x_test, y_test)
+# print("acc >> ", acc)
+# print("loss >> ", loss)
+
+
+
 
 
 
@@ -80,11 +110,3 @@ print("acc >> ", acc)
 
 
 
-# loss >>  0.14027364552021027
-# acc >>  0.9333333373069763
-
-# {'model__optimizer': 'adadelta', 'model__epochs': 100, 'model__drop': 0.2, 'model__batch_size': 55}
-
-## 튜닝 후
-# loss >>  0.1005459576845169
-# acc >>  0.9666666388511658
