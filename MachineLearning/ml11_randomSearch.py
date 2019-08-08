@@ -40,7 +40,7 @@ parameters = {
 # parameters = parm()
 
 
-## 그리드서치
+## 서치
 kfold_cv = KFold(n_splits=5, shuffle=True)
 # clf = GridSearchCV(SVC(), parameters, cv=kfold_cv)
 clf = RandomizedSearchCV(SVC(), parameters, cv=kfold_cv)
