@@ -65,8 +65,8 @@ y_test = to_categorical(y_test)
 
 print("x_train shape >> ", x_train.shape)   # (3918,11)
 print("y_train shape >> ", y_train.shape)   # (3918,10)
-print("x_test shape >> ", x_test.shape)   # (980,11)
-print("y_test shape >> ", y_test.shape)   # (980,10)
+print("x_test shape >> ", x_test.shape)     # (980,11)
+print("y_test shape >> ", y_test.shape)     # (980,10)
 
 
 
@@ -84,7 +84,7 @@ model = KerasClassifier(build_fn=bulid_model)
 prameter = {
     "model__batch_size": [5,15,55],
     "model__optimizer": ["adam", "adadelta", "rmsprop"],
-    "model__keep_prob": [0,0.2,0.5],
+    "model__drop": [0,0.2,0.5],
     "model__epochs": [50, 100]
 }
 
@@ -93,7 +93,7 @@ pipe = Pipeline([("scaler", StandardScaler()), ("model", model)])
 search = RandomizedSearchCV(pipe, prameter, cv=kfold_cv)
 search.fit(x_train, y_train)
 
-print(search.best_params_)
+print("최적의 파라미터 >> ", search.best_params_)
 
 # from sklearn.metrics import accuracy_score
 # y_pred = search.predict(x_test)
