@@ -30,36 +30,31 @@ print("X_train shape >> ", X_train.shape)   # (50000, 32, 32, 3)
 print("Y_train shape >> ", Y_train.shape)   # (50000, 1)
 print("X_test shape : ", X_test.shape)      # (10000, 32, 32, 3)
 print("Y_test shape : ", Y_test.shape)      # (10000, 1)
-print("======================================================")
+print("=======================================")
+
 X_train, X_train300, Y_train, Y_train300 = train_test_split(X_train, Y_train, test_size=0.006, shuffle=True)
 print("X_train300 shape >> ", X_train300.shape)   # (300, 32, 32, 3)
 print("Y_train300 shape >> ", Y_train300.shape)   # (300, 1)
 
-# X_test, X_test300, Y_test, Y_test300 = train_test_split(X_test, Y_test, test_size=0.03, shuffle=True)
-# print("X_test300 shape >> ", X_test300.shape)   # (300, 32, 32, 3)
-# print("Y_test300 shape >> ", Y_test300.shape)   # (300, 1)
 
 ## 범주형으로 변환(one hot encoding)
 Y_train300 = np_utils.to_categorical(Y_train300, NB_CLASSES)
-# Y_test300 = np_utils.to_categorical(Y_test300, NB_CLASSES)
 Y_test = np_utils.to_categorical(Y_test, NB_CLASSES)
 
 ## 실수형으로 변환 및 정규화
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 X_train300 = X_train300.astype("float32")
-# X_test300 = X_test300.astype("float32")
 X_test = X_test.astype("float32")
 
 X_train_reshape = X_train300.reshape(300, 3072)
-# X_test_reshape = X_test300.reshape(300, 3072)
 X_test_reshape = X_test.reshape(10000, 3072)
 
 sc = MinMaxScaler()
 # sc = StandardScaler()
 X_train300 = sc.fit_transform(X_train_reshape)
-X_test300 = sc.transform(X_test_reshape)
+X_test = sc.transform(X_test_reshape)
 X_train300 = X_train300.reshape(300, 32, 32, 3)
-X_test = X_test_reshape.reshape(10000, 32, 32, 3)
+X_test = X_test.reshape(10000, 32, 32, 3)
 
 ## 데이터셋 shape 확인
 print("=======================================")
@@ -83,13 +78,13 @@ def bulid_model(optimizer="adam", drop=0.2):
     model.add(MaxPooling2D(pool_size=(2,2)))
     model.add(Dropout(drop))
 
-    # model.add(Conv2D(128, (3,3), padding="same"))
-    # model.add(BatchNormalization())
-    # model.add(Conv2D(128, (3,3), padding="same"))
-    # model.add(BatchNormalization())
-    # model.add(Activation("relu"))
-    # model.add(MaxPooling2D(pool_size=(2,2)))
-    # model.add(Dropout(drop))
+    model.add(Conv2D(128, (3,3), padding="same"))
+    model.add(BatchNormalization())
+    model.add(Conv2D(128, (3,3), padding="same"))
+    model.add(BatchNormalization())
+    model.add(Activation("relu"))
+    model.add(MaxPooling2D(pool_size=(2,2)))
+    model.add(Dropout(drop))
 
     # model.add(Conv2D(512, (3,3), padding="same"))
     # model.add(BatchNormalization())
@@ -108,32 +103,23 @@ def bulid_model(optimizer="adam", drop=0.2):
 
     model.compile(loss="categorical_crossentropy", optimizer=optimizer, metrics=["accuracy"])
 
-    return model
+    print("Generate start...")
+    model.fit_generator(datagen.flow(X_train300, Y_train300, batch_size=200), steps_per_epoch=1, epochs=1)
+    print("end...")
 
+    return model
 
 
 ## 이미지 데이터 증폭
 from keras.preprocessing.image import ImageDataGenerator
-data_generator = ImageDataGenerator(rotation_range=20, width_shift_range=0.02, height_shift_range=0.02, horizontal_flip=True)
 
-# X_train300gen = data_generator.flow(X_train300, batch_size=167)
-# Y_train = data_generator.flow(Y_train300, batch_size=167)
-# X_test = data_generator.flow(X_test300, batch_size=34)
-# Y_test = data_generator.flow(Y_test300, batch_size=34)
-
-# X_train300gen = np.array(X_train300gen)
-# X_train = np.array(X_train)
-# X_test = np.array(X_test)
-
-# print("X_train300gen shape generate", X_train300gen.shape)
-
-model = bulid_model()
-print("Generate start...")
-mode= model.fit_generator(data_generator.flow(X_train300, Y_train300, batch_size=167), steps_per_epoch=300, epochs=1)
-print("End...")
-
-print("X_train300 shape >> ", X_train300.shape)
-
+datagen = ImageDataGenerator(
+    featurewise_center=True,
+    featurewise_std_normalization=True,
+    rotation_range=20,
+    width_shift_range=0.2,
+    height_shift_range=0.2,
+    horizontal_flip=True)
 
 
 # 3. 튜닝
@@ -142,7 +128,7 @@ from sklearn.model_selection import RandomizedSearchCV, KFold
 from sklearn.pipeline import Pipeline
 
 k_cv = KFold(n_splits=5, shuffle=True)
-# model = KerasClassifier(build_fn=bulid_model)
+model = KerasClassifier(build_fn=bulid_model)
 
 
 ## 파라미터 설정
@@ -169,9 +155,8 @@ search.fit(X_train300, Y_train300)
 print("최적 매개변수 >> ", search.best_estimator_)
 
 
-
 # 4. 평가
-Y_pred = search.predict(X_test300)
+Y_pred = search.predict(X_test)
 print("최종 정답률 >> ", accuracy_score(Y_test, Y_pred))
 last_score = search.score(Y_test, Y_test)
 print("최종 정답률 >> ", last_score)
@@ -187,25 +172,3 @@ print("RMSE : ", RMSE(Y_test, Y_pred))
 
 
 
-'''
-## stop
-stop = EarlyStopping(monitor="loss", patience=5)
-
-## generator
-from keras.preprocessing.image import ImageDataGenerator
-data_generator = ImageDataGenerator(rotation_range=20, width_shift_range=0.02, height_shift_range=0.02, horizontal_flip=True)
-
-# model.fit(X_train, Y_train, batch_size=BATCH_SIZE, epochs=NB_EPOCH, validation_split=VALIDATION_SPLIT, verbose=VERBOSE, callbacks=[stop])
-model.fit_generator(data_generator.flow(X_train, Y_train, batch_size=BATCH_SIZE), steps_per_epoch=300, epochs=200, callbacks=[stop])
-
-print("Testing...")
-
-
-score = model.evaluate(X_test, Y_test, batch_size=BATCH_SIZE)
-print("\nTest score : ", score[0])
-print("Test accuracy : ", score[1])
-
-
-## acc
-print("\nTest Accuracy : %.4f" % (model.evaluate(X_test, Y_test)[1]))
-'''
