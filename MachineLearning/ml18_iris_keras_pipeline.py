@@ -9,8 +9,8 @@ from keras.utils import to_categorical
 
 
 ## 데이터 로드
-# dataset = numpy.loadtxt("./data/pima-indians-diabetes.csv", delimiter=",")
-iris_data = pd.read_csv("/content/iris.csv", names=["SepalLenght", "SepalWidth", "PetalLenght", "petalWidth", "Name"], encoding="utf-8")
+iris_data = pd.read_csv("C:/pj/ML/MachineLearning/data/iris.csv", names=["SepalLenght", "SepalWidth", "PetalLenght", "petalWidth", "Name"], encoding="utf-8")
+# iris_data = pd.read_csv("/content/iris.csv", names=["SepalLenght", "SepalWidth", "PetalLenght", "petalWidth", "Name"], encoding="utf-8")
 # print("iris shape >> ", iris_data.shape)    #(150,5)
 print(iris_data["Name"].unique())
 
@@ -79,11 +79,11 @@ pipe = Pipeline([
 
 search = RandomizedSearchCV(pipe, parameters, cv=k_cv)
 search.fit(x_train, y_train)
-print(search.best_params_)
+print("최적의 파라미터 >> ", search.best_params_)
 
-from sklearn.metrics import accuracy_score
-y_pred = search.predict(x_test)
-print('정답률 >> ', accuracy_score(y_test, y_pred))
+# from sklearn.metrics import accuracy_score
+# y_pred = search.predict(x_test)
+# print('정답률 >> ', accuracy_score(y_test, y_pred))
 
 
 # ## 모델평가
@@ -110,3 +110,4 @@ print('정답률 >> ', accuracy_score(y_test, y_pred))
 
 
 
+# {'model__optimizer': 'adadelta', 'model__epochs': 100, 'model__drop': 0.5, 'model__batch_size': 5}

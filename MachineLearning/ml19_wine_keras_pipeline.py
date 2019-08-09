@@ -7,7 +7,7 @@ from keras.callbacks import EarlyStopping
 
 
 # 1. 데이터 로드
-wine = pd.read_csv("/content/winequality-white.csv", sep=";", encoding="utf-8")
+wine = pd.read_csv("C:/pj/ML/MachineLearning/data/winequality-white.csv", sep=";", encoding="utf-8")
 
 
 ## 훈련 / 시험데이터셋 분리
@@ -99,3 +99,4 @@ print("최적의 파라미터 >> ", search.best_params_)
 # y_pred = search.predict(x_test)
 # print('정답률 >> ', accuracy_score(y_test, y_pred))
 
+# {'model__optimizer': 'adadelta', 'model__epochs': 100, 'model__drop': 0, 'model__batch_size': 15}
