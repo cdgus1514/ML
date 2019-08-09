@@ -68,10 +68,10 @@ model.compile(loss="categorical_crossentropy", optimizer="adadelta", metrics=["a
 early_stopping_callback = EarlyStopping(monitor="val_loss", patience=10)    # 변화값이 patience이상 변경 없을경우 중지
 
 
+# 60000개 새로운 이미지 생성, 훈련 실행
 from keras.preprocessing.image import ImageDataGenerator
 data_generator = ImageDataGenerator(rotation_range=20, width_shift_range=0.02, height_shift_range=0.02, horizontal_flip=True)
 
-# 60000개 새로운 이미지 생성, 훈련 실행
 model.fit_generator(data_generator.flow(X_train, Y_train, batch_size=32), steps_per_epoch=len(X_train)//32, epochs=200, validation_data=(X_test, Y_test), verbose=1)
 
 
