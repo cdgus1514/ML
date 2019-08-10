@@ -183,24 +183,7 @@ print("best score >> ", search.best_score_)
 
 
 '''
-## stop
-stop = EarlyStopping(monitor="loss", patience=5)
-
-## generator
-from keras.preprocessing.image import ImageDataGenerator
-data_generator = ImageDataGenerator(rotation_range=20, width_shift_range=0.02, height_shift_range=0.02, horizontal_flip=True)
-
-# model.fit(X_train, Y_train, batch_size=BATCH_SIZE, epochs=NB_EPOCH, validation_split=VALIDATION_SPLIT, verbose=VERBOSE, callbacks=[stop])
-model.fit_generator(data_generator.flow(X_train, Y_train, batch_size=BATCH_SIZE), steps_per_epoch=300, epochs=200, callbacks=[stop])
-
-print("Testing...")
-
-
-score = model.evaluate(X_test, Y_test, batch_size=BATCH_SIZE)
-print("\nTest score : ", score[0])
-print("Test accuracy : ", score[1])
-
-
-## acc
-print("\nTest Accuracy : %.4f" % (model.evaluate(X_test, Y_test)[1]))
+best estimator >>  <keras.wrappers.scikit_learn.KerasClassifier object at 0x7f1c3665dda0>
+best params >>  {'optimizer': 'adam', 'epochs': 50, 'drop': 0.2, 'batch_size': 15}
+best score >>  0.32333334162831306
 '''
