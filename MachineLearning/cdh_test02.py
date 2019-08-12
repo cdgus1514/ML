@@ -19,13 +19,16 @@ IMG_CHANNELS = 3
 IMG_ROWS = 32
 IMG_CLOS = 32
 
+# 하이퍼 파라미터 튜닝값
+# best params >>  {'optimizer': 'adam', 'epochs': 50, 'drop': 0.2, 'batch_size': 15}
 
 # 상수 정의
-BATCH_SIZE = 200
-NB_EPOCH = 1000
+BATCH_SIZE = 15
+NB_EPOCH = 50
 NB_CLASSES = 10
 VERBOSE = 1
 VALIDATION_SPLIT = 0.2
+drop = 0.2
 
 
 # 데이터셋 불러오기
@@ -46,14 +49,13 @@ X_test = X_test.astype("float32")
 
 X_train_reshape = X_train.reshape(50000, 3072)
 X_test_reshape = X_test.reshape(10000, 3072)
-sclaer = MinMaxScaler()
-sclaer.fit(X_train)
-X_train_reshape = sclaer.transform(X_train_reshape)
-X_test_reshape = sclaer.transform(X_test_reshape)
+sc = MinMaxScaler()
+# sclaer.fit(X_train_reshape)
+X_train_reshape = sc.fit_transform(X_train_reshape)
+X_test_reshape = sc.transform(X_test_reshape)
 X_train_reshape = X_train_reshape.reshape(50000, 32, 32, 3)
 X_test_reshape = X_test_reshape.reshape(10000, 32, 32, 3)
 
-# 하이퍼 파라미터 튜닝값
 
 # 신경망 정의
 model = Sequential()
@@ -64,28 +66,28 @@ model.add(Conv2D(32, (3, 3), padding="same"))
 model.add(BatchNormalization())
 model.add(Activation("relu"))
 model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Dropout(0.5))
+model.add(Dropout(drop))
 
-model.add(Conv2D(128, (3, 3), padding="same"))
-model.add(BatchNormalization())
-model.add(Conv2D(128, (3, 3), padding="same"))
-model.add(BatchNormalization())
-model.add(Activation("relu"))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Dropout(0.5))
+# model.add(Conv2D(128, (3, 3), padding="same"))
+# model.add(BatchNormalization())
+# model.add(Conv2D(128, (3, 3), padding="same"))
+# model.add(BatchNormalization())
+# model.add(Activation("relu"))
+# model.add(MaxPooling2D(pool_size=(2, 2)))
+# model.add(Dropout(0.5))
 
-model.add(Conv2D(512, (3, 3), padding="same"))
-model.add(BatchNormalization())
-model.add(Conv2D(512, (3, 3), padding="same"))
-model.add(BatchNormalization())
-model.add(Activation("relu"))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Dropout(0.25))
+# model.add(Conv2D(512, (3, 3), padding="same"))
+# model.add(BatchNormalization())
+# model.add(Conv2D(512, (3, 3), padding="same"))
+# model.add(BatchNormalization())
+# model.add(Activation("relu"))
+# model.add(MaxPooling2D(pool_size=(2, 2)))
+# model.add(Dropout(0.2))
 
 model.add(Flatten())
 model.add(Dense(512))
 model.add(Activation("relu"))
-model.add(Dropout(0.5))
+model.add(Dropout(drop))
 model.add(Dense(NB_CLASSES))
 model.add(Activation("softmax"))
 
@@ -101,7 +103,7 @@ early_stopping_callback = EarlyStopping(
     monitor="val_loss", patience=20)    # 변화값이 patience이상 변경 없을경우 중지
 
 history = model.fit(X_train, Y_train, batch_size=BATCH_SIZE, epochs=NB_EPOCH,
-                    validation_split=VALIDATION_SPLIT, verbose=VERBOSE, callbacks=[early_stopping_callback])
+                    validation_split=VALIDATION_SPLIT, callbacks=[early_stopping_callback])
 
 print("Testing...")
 
@@ -109,3 +111,8 @@ print("Testing...")
 score = model.evaluate(X_test, Y_test, batch_size=BATCH_SIZE, verbose=VERBOSE)
 print("\nTest score : ", score[0])
 print("Test accuracy : ", score[1])
+
+'''
+Test score :  1.3268471739068628
+Test accuracy :  0.6678000173196197
+'''
