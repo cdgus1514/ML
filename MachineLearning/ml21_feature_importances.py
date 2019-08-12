@@ -1,7 +1,5 @@
 from sklearn.tree import DecisionTreeClassifier
-# from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestClassifier
-# from sklearn.ensemble import RandomForestRegressor
 
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
