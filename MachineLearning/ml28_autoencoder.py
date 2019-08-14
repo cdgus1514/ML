@@ -41,7 +41,7 @@ hidden = Dense(32, activation="relu")(hidden)
 hidden = Dense(32, activation="relu")(hidden)
 
 # 입력의 손실이 있는 재구성
-decoded = Dense(784, activation="sigmoid")(encoded)
+decoded = Dense(784, activation="sigmoid")(hidden)
 # decoded = Dense(784, activation="relu")(encoded)
 
 # 재구성으로 매핑할 모델

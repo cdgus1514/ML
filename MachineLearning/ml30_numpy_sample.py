@@ -307,6 +307,7 @@ class weather_npz:
         print("Y_test shape >> ", Y_test.shape)     # (366,)
 
 
+
 if __name__ == "__main__":
 
     create = iris_npz()
@@ -329,3 +330,18 @@ if __name__ == "__main__":
     
     create = weather_npz()
     # weather_npz.create_npz()
+
+
+
+##################################################
+# !USAGE!
+#
+#
+# 1. npz 데이터셋 불러오기                               
+# 변수명 = np.load("파일명.npz")
+# 
+# x_train = 변수명["x_train"]
+# y_test = 변수명["y_test"]
+#
+#
+##################################################
