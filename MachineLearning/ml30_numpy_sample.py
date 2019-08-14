@@ -5,12 +5,12 @@ from sklearn.model_selection import train_test_split
 
 class iris_npz:
     def create_npz():
-        iris_data = pd.read_csv("/content/iris.csv", names=["SepalLenght", "SepalWidth", "PetalLenght", "petalWidth", "Name"], encoding="utf-8")
-    #     iris_data = pd.read_csv("C:/CDH/AI/ML/Data/iris.csv", names=["SepalLenght", "SepalWidth", "PetalLenght", "petalWidth", "Name"], encoding="utf-8")
+        df = pd.read_csv("/content/iris.csv", names=["SepalLenght", "SepalWidth", "PetalLenght", "petalWidth", "Name"], encoding="utf-8")
+        # df = pd.read_csv("C:/CDH/AI/ML/Data/iris.csv", names=["SepalLenght", "SepalWidth", "PetalLenght", "petalWidth", "Name"], encoding="utf-8")
 
         from sklearn.preprocessing import LabelEncoder
-        x = iris_data.iloc[:, 0:4].values
-        y = iris_data.iloc[:, 4].values
+        x = df.iloc[:, 0:4].values
+        y = df.iloc[:, 4].values
 
         encoder = LabelEncoder()
         y1 = encoder.fit_transform(y)
@@ -151,12 +151,12 @@ class boston_npz:
 
 class wine_npz:
     def create_npz():
-        # wine_data = pd.read_csv("/content/winequality-white.csv", sep=";", encoding="utf-8")
-        wine_data = pd.read_csv("C:/CDH/AI/ML/Data/winequality-white.csv", sep=";", encoding="utf-8")
+        # df = pd.read_csv("/content/winequality-white.csv", sep=";", encoding="utf-8")
+        df = pd.read_csv("C:/CDH/AI/ML/Data/winequality-white.csv", sep=";", encoding="utf-8")
 
         ## 훈련 / 시험데이터셋 분리
-        y = wine_data["quality"]
-        x = wine_data.drop("quality", axis=1)
+        y = df["quality"]
+        x = df.drop("quality", axis=1)
 
         ## y레이블 변경
         newlist = []
@@ -254,7 +254,6 @@ class weather_npz:
         test_year = (df["연"] >= 2016)
         interval = 6
 
-
         ## 과거 6일의 데이터를 기반으로 학습할 데이터 생성
         def make_data(data):
             x = []  #학습데이터셋
@@ -308,6 +307,44 @@ class weather_npz:
 
 
 
+class diabetes_npz:
+    def create_npz():
+        # df = np.loadtxt("C:/CDH/AI/ML/Data/tem10y.csv", delimiter=",")
+        df = np.loadtxt("/content/pima-indians-diabetes.csv", delimiter=",")
+        X = df[:, 0:8]
+        Y = df[:, 8]
+
+        x_train, x_test, y_train, y_test = train_test_split(X,Y, test_size=0.2, train_size=0.8, shuffle=True)
+        print("x_train shape >> ", x_train.shape)
+        print("y_train shape >> ", y_train.shape)
+        print("x_test shape >> ", x_test.shape)
+        print("y_test shape >> ", y_test.shape)
+
+        ## diabetes datasets save ###
+        np.savez("diabetes_train.npz", x_train=x_train, y_train=y_train)
+        np.savez("diabetes_test.npz", x_test=x_test, y_test=y_test)
+        print("! diabetes_npz 파일 생성")
+
+        print("--------------------------------------------------")
+
+        ### diabetes datases load ###
+        diabetes_load = np.load("diabetes_train.npz")
+        X_train = diabetes_load["x_train"]
+        Y_train = diabetes_load["y_train"]
+
+        diabetes_load = np.load("diabetes_test.npz")
+        X_test = diabetes_load["x_test"]
+        Y_test = diabetes_load["y_test"]
+
+
+        print("X_train shape >> ", X_train.shape)   # (614,8)
+        print("Y_train shape >> ", Y_train.shape)   # (614,)
+        print("X_test shape >> ", X_test.shape)     # (154,8)
+        print("Y_test shape >> ", Y_test.shape)     # (154,)
+
+
+
+
 if __name__ == "__main__":
 
     create = iris_npz()
@@ -330,6 +367,9 @@ if __name__ == "__main__":
     
     create = weather_npz()
     # weather_npz.create_npz()
+
+    create = diabetes_npz()
+    # diabetes_npz.create_npz()
 
 
 

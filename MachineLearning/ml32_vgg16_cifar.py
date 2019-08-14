@@ -1,8 +1,9 @@
 from keras.applications import VGG16
-from keras.layers import Dense, Flatten, Conv2D, MaxPool2D, Dropout
-from keras.models import Sequential
+from keras.layers import Dense, Flatten, Conv2D, MaxPool2D, Dropout, BatchNormalization, Input
+from keras.models import Sequential, Model
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 # 1. 데이터
@@ -51,6 +52,3 @@ model.summary()
 model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
 
 model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=10, batch_size=200)
-
-
-print("\nTest Accuracy : %.4f" % (model.evaluate(x_test, y_test)[1]))
