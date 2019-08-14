@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from keras.models import Sequential, Model
-from keras.layers import Dense, LSTM, Dropout, BatchNormalization, Conv1D, MaxPool1D, Embedding, Input
+from keras.layers import Dense, LSTM, Dropout, BatchNormalization, Conv1D, MaxPool1D, Embedding, Input, Flatten
 from sklearn.preprocessing import MinMaxScaler
 from keras.callbacks import EarlyStopping
 
