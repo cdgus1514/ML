@@ -5,8 +5,8 @@ from sklearn.model_selection import train_test_split
 
 class iris_npz:
     def create_npz():
-        df = pd.read_csv("/content/iris.csv", names=["SepalLenght", "SepalWidth", "PetalLenght", "petalWidth", "Name"], encoding="utf-8")
-        # df = pd.read_csv("C:/CDH/AI/ML/Data/iris.csv", names=["SepalLenght", "SepalWidth", "PetalLenght", "petalWidth", "Name"], encoding="utf-8")
+        # df = pd.read_csv("/content/iris.csv", names=["SepalLenght", "SepalWidth", "PetalLenght", "petalWidth", "Name"], encoding="utf-8")
+        df = pd.read_csv("C:/Study/ML/Data/iris.csv", names=["SepalLenght", "SepalWidth", "PetalLenght", "petalWidth", "Name"], encoding="utf-8")
 
         from sklearn.preprocessing import LabelEncoder
         x = df.iloc[:, 0:4].values
@@ -152,7 +152,7 @@ class boston_npz:
 class wine_npz:
     def create_npz():
         # df = pd.read_csv("/content/winequality-white.csv", sep=";", encoding="utf-8")
-        df = pd.read_csv("C:/CDH/AI/ML/Data/winequality-white.csv", sep=";", encoding="utf-8")
+        df = pd.read_csv("C:/Study/ML/Data/winequality-white.csv", sep=";", encoding="utf-8")
 
         ## 훈련 / 시험데이터셋 분리
         y = df["quality"]
@@ -247,7 +247,7 @@ class cancer_npz:
 class weather_npz:
     def create_npz():
         # df = pd.read_csv("/content/tem10y.csv", encoding="utf-8")
-        df = pd.read_csv("C:/CDH/AI/ML/Data/tem10y.csv", encoding="utf-8")
+        df = pd.read_csv("C:/Study/ML/Data/tem10y.csv", encoding="utf-8")
 
         ## 데이터 분할
         train_year = (df["연"] <= 2015)
@@ -309,8 +309,8 @@ class weather_npz:
 
 class diabetes_npz:
     def create_npz():
-        # df = np.loadtxt("C:/CDH/AI/ML/Data/tem10y.csv", delimiter=",")
-        df = np.loadtxt("/content/pima-indians-diabetes.csv", delimiter=",")
+        df = np.loadtxt("C:/Study/ML/Data/pima-indians-diabetes.csv", delimiter=",")
+        # df = np.loadtxt("/content/pima-indians-diabetes.csv", delimiter=",")
         X = df[:, 0:8]
         Y = df[:, 8]
 
@@ -348,28 +348,28 @@ class diabetes_npz:
 if __name__ == "__main__":
 
     create = iris_npz()
-    # iris_npz.create_npz()
+    iris_npz.create_npz()
 
     create = mnist_npz()
-    # mnist_npz.create_npz()
+    mnist_npz.create_npz()
 
     create = cifar10_npz()
-    # cifar10_npz.create_npz()
+    cifar10_npz.create_npz()
     
     create = boston_npz()
-    # boston_npz.create_npz()
+    boston_npz.create_npz()
     
     create = wine_npz()
-    # wine_npz.create_npz()
+    wine_npz.create_npz()
     
     create = cancer_npz()
-    # cancer_npz.create_npz()
+    cancer_npz.create_npz()
     
     create = weather_npz()
-    # weather_npz.create_npz()
+    weather_npz.create_npz()
 
     create = diabetes_npz()
-    # diabetes_npz.create_npz()
+    diabetes_npz.create_npz()
 
 
 
