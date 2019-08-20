@@ -11,7 +11,7 @@ tf.set_random_seed(seed)
 
 
 # 데이터 로드
-dataset = numpy.loadtxt("./data/pima-indians-diabetes.csv", delimiter=",")
+dataset = numpy.loadtxt("C:/Study/ML/Data/pima-indians-diabetes.csv", delimiter=",")
 # dataset = numpy.loadtxt("/content/pima-indians-diabetes.csv", delimiter=",")
 X = dataset[:, 0:8]
 Y = dataset[:, 8]

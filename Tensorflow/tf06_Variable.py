@@ -11,11 +11,11 @@ print(W)
 
 W = tf.Variable([0.3], tf.float32)
 
-# ## Session
-# sess = tf.Session()
-# sess.run(tf.global_variables_initializer())
-# print(sess.run(W))
-# sess.close()
+## Session
+sess = tf.Session()
+sess.run(tf.global_variables_initializer())
+print(sess.run(W))
+sess.close()
 
 
 # ## InteractiveSession
@@ -26,9 +26,9 @@ W = tf.Variable([0.3], tf.float32)
 
 
 ## Session >> eval
-sess = tf.Session()
-sess.run(tf.global_variables_initializer())
-print(W.eval(session=sess))
+# sess = tf.Session()
+# sess.run(tf.global_variables_initializer())
+# print(W.eval(session=sess))
 
 
 # ## with문 안에 일반 세션을 사용 >> InteractiveSession과 같음
