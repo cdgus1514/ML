@@ -2,33 +2,31 @@ import tensorflow as tf
 import numpy as np
 tf.set_random_seed(777)
 
+# Data load
 xy = np.loadtxt("C:/Study/ML/Data/data-04-zoo.csv", delimiter=",", dtype=np.float32)
 x_data = xy[:, 0:-1]
 y_data = xy[:,[-1]]
 print(x_data.shape) # (101,16)
 print(y_data.shape) # (101,1)
 
+
+
+# Graph
 X = tf.placeholder(tf.float32, shape=[None,16])
 Y = tf.placeholder(tf.int32, shape=[None,1])
 
 ## one-hot encoding
 Y_one_hot = tf.one_hot(Y, 7)
 print("one-hot >>", Y_one_hot) # one-hot >> Tensor("one_hot:0", shape=(?, 1, 7), dtype=float32)
-
 Y_one_hot = tf.reshape(Y_one_hot, [-1, 7])
 print("rehsape one-hot >>", Y_one_hot) # rehsape one-hot >> Tensor("Reshape:0", shape=(?, 7), dtype=float32)
 
-
+## layer
 W = tf.Variable(tf.random_normal([16,7]), name="weight")
 b = tf.Variable(tf.random_normal([7]), name="bias")
-
-
-
-# model
 logists = tf.matmul(X,W)+b
 hypothesis = tf.nn.softmax(logists)
 
-## model compile
 # cost = tf.reduce_mean(-tf.reduce_sum(Y*tf.log(hypothesis),axis=1))
 cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(logits=logists, labels=tf.stop_gradient([Y_one_hot])))
 optimizer = tf.train.GradientDescentOptimizer(0.1).minimize(cost)

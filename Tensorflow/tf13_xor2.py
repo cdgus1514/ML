@@ -12,15 +12,13 @@ y_data = np.array([[0], [1], [1], [0]], dtype=np.float32)
 X = tf.placeholder(tf.float32)
 Y = tf.placeholder(tf.float32)
 
-n = 10
-
-W1 = tf.Variable(tf.random_normal([2,n]), name="weight1")
-b1 = tf.Variable(tf.random_normal([n]), name="bias1")
+W1 = tf.Variable(tf.random_normal([2,11]), name="weight1")
+b1 = tf.Variable(tf.random_normal([11]), name="bias1")
 L1 = tf.sigmoid(tf.matmul(X,W1)+b1)
 
-# W1 = tf.Variable(tf.random_normal([2,n]), name="weight2")
-# b1 = tf.Variable(tf.random_normal([n]), name="bias2")
-# L1 = tf.nn.relu(tf.matmul(X,W1)+b1)
+W1 = tf.Variable(tf.random_normal([2,100]), name="weight2")
+b1 = tf.Variable(tf.random_normal([100]), name="bias2")
+L1 = tf.nn.relu(tf.matmul(X,W1)+b1)
 
 # W1 = tf.Variable(tf.random_normal([2,200]), name="weight3")
 # b1 = tf.Variable(tf.random_normal([200]), name="bias3")
@@ -50,7 +48,7 @@ L1 = tf.sigmoid(tf.matmul(X,W1)+b1)
 # b1 = tf.Variable(tf.random_normal([800]), name="bias9")
 # L1 = tf.nn.relu(tf.matmul(X,W1)+b1)
 
-W2 = tf.Variable(tf.random_normal([n,1]), name="weight10")
+W2 = tf.Variable(tf.random_normal([100,1]), name="weight10")
 b2 = tf.Variable(tf.random_normal([1]), name="bias10")
 hypothesis = tf.sigmoid(tf.matmul(L1,W2)+b2)
 
