@@ -13,6 +13,8 @@ print(y_data.shape) # (101,1)
 # from keras.utils import np_utils
 # y_data = np_utils.to_categorical(y_data)
 y_one_hot = tf.one_hot(y_data, depth=7).eval(session=tf.Session())
+print(y_one_hot.shape)
+
 y_one_hot = np.reshape(y_one_hot, (101,7))
 
 # print(y_data)
@@ -53,7 +55,7 @@ with tf.Session() as sess:
     # Acuuracy
     h, a, l = sess.run([hypothesis, accuracy, cost], feed_dict={X:x_data, Y:y_one_hot})
     print("Hypothesis :\n", h, "\n\nacc :", a, "\nloss :", l)
-
+    
 
 
 '''

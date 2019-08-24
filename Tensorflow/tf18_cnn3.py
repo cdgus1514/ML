@@ -1,0 +1,108 @@
+import tensorflow as tf
+import matplotlib.pyplot as plt
+import random
+tf.set_random_seed(777)
+
+# Data load
+from tensorflow.examples.tutorials.mnist import input_data
+mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
+
+lr = 0.001
+epochs = 15
+batch_size = 100
+
+
+
+# Graph
+X = tf.placeholder(tf.float32, shape=[None, 784])
+X_img = tf.reshape(X, [-1,28,28,1]) # b/w
+Y = tf.placeholder(tf.float32, shape=[None, 10])
+
+## layer1
+W1 = tf.Variable(tf.random.normal([3,3,1,32], stddev=0.01))     # kernel_size = 3,3 // 흑백 = 1 // output
+# print(W1) # <tf.Variable 'Variable:0' shape=(3, 3, 1, 32) dtype=float32_ref>
+L1 = tf.nn.conv2d(X_img, W1, strides=[1,1,1,1], padding="SAME") # 1,1 >> 1칸씩 이동 + padding >> (28,28,32)
+# print(L1) # Tensor("Conv2D:0", shape=(?, 28, 28, 32), dtype=float32)
+L1 = tf.nn.relu(L1)
+L1 = tf.nn.max_pool(L1, ksize=[1,2,2,1], strides=[1,2,2,1], padding="SAME") # (2,2) cut >> 2칸씩 이동 >> (14,14,32)
+# print(L1) # Tensor("MaxPool:0", shape=(?, 14, 14, 32), dtype=float32)
+
+
+# layer2
+W2 = tf.Variable(tf.random.normal([3,3,32,64], stddev=0.01))    # 32 == W1의 output
+# print(W2) # <tf.Variable 'Variable_1:0' shape=(3, 3, 32, 64) dtype=float32_ref>
+L2 = tf.nn.conv2d(L1, W2, strides=[1,1,1,1], padding="SAME")
+# print(L2) # Tensor("Conv2D_1:0", shape=(?, 14, 14, 64), dtype=float32)
+L2 = tf.nn.relu(L2)
+L2 = tf.nn.max_pool(L2, ksize=[1,2,2,1], strides=[1,2,2,1], padding="SAME")
+# print(L2) # ensor("MaxPool_1:0", shape=(?, 7, 7, 64), dtype=float32)
+
+
+# layer3
+W3 = tf.Variable(tf.random.normal([3,3,32,64], stddev=0.01))    # 32 == W1의 output
+# print(W2)   # <tf.Variable 'Variable_1:0' shape=(3, 3, 32, 64) dtype=float32_ref>
+L3 = tf.nn.conv2d(L1, W2, strides=[1,1,1,1], padding="SAME")
+L3 = tf.nn.relu(L3)
+# L3 = tf.nn.max_pool(L3, ksize=[1,2,2,1], strides=[1,2,2,1], padding="SAME")
+# print(L3)
+
+
+# L2_flat = tf.reshape(L3, [-1,7*7*64])
+L2_flat = tf.reshape(L3, [-1,14*14*64])
+
+
+# Add Dense
+W4 = tf.get_variable("W4", shape=[14*14*64, 64], initializer=tf.contrib.layers.xavier_initializer())
+b1 = tf.Variable(tf.random_normal([64]))
+L4 = tf.nn.leaky_relu(tf.matmul(L2_flat, W4)+b1)
+
+W5 = tf.get_variable("W5", shape=[64, 32], initializer=tf.contrib.layers.xavier_initializer())
+b1 = tf.Variable(tf.random_normal([32]))
+L5 = tf.nn.leaky_relu(tf.matmul(L4, W5)+b1)
+
+
+##### 8/23 #####
+W6 = tf.get_variable("W6", shape=[32, 10], initializer=tf.contrib.layers.xavier_initializer())
+b2 = tf.Variable(tf.random_normal([10]))
+logits = tf.matmul(L5, W6) + b2
+
+cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=Y))
+optimizer = tf.train.AdamOptimizer(lr).minimize(cost)
+
+
+sess = tf.Session()
+sess.run(tf.global_variables_initializer())
+
+
+print("Learning started.")
+for epoch in range(epochs):
+    avg_cost = 0
+    total_batch = int(mnist.train.num_examples / batch_size)
+
+    for i in range(total_batch):
+        batch_xs, batch_ys = mnist.train.next_batch(batch_size)
+        feed_dict = {X:batch_xs, Y:batch_ys}
+        c, _ = sess.run([cost, optimizer], feed_dict=feed_dict)
+        avg_cost += c / total_batch
+
+    print("Epochs >> ", "%04d" % (epoch+1), "cost >> ", "{:.9f}".format(avg_cost))
+
+print("Finish")
+
+
+# accuracy
+correct_prediction = tf.equal(tf.argmax(logits, 1), tf.argmax(Y,1))
+accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+print("Accuracy >>", sess.run(accuracy, feed_dict={X:mnist.test.images, Y:mnist.test.labels}))
+
+
+# predict
+r = random.randint(0, mnist.test.num_examples -1)
+print("Label >>", sess.run(tf.argmax(mnist.test.labels[r:r+1], 1)))
+print("Prediction >>", sess.run(tf.argmax(mnist.test.images[r:r+1])))
+
+
+
+'''
+Accuracy >> 0.9836
+'''
