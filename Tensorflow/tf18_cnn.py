@@ -7,6 +7,11 @@ tf.set_random_seed(777)
 from tensorflow.examples.tutorials.mnist import input_data
 mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
 
+print(mnist.train.images)
+print(mnist.test.labels)
+print(mnist.train.images.shape) # (55000, 784)
+print(mnist.test.labels.shape)  # (10000, 10)
+
 lr = 0.001
 epochs = 15
 batch_size = 100

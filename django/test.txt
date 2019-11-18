@@ -1,0 +1,45 @@
+cd c:\
+dir
+cd Study
+dir
+cd ML
+dir
+cd django
+dir
+del ?
+dir
+?
+help del
+cd ..
+dir
+pwd
+dir
+help del
+del django
+Y
+dir
+pip list django
+pip install django
+pip list |findstr django
+pip list |findstr jango
+django-admin startproject mysite
+dir
+cd mysite
+dir
+cd ..
+dir
+cd django
+dir
+python manage.py startapp polls
+dir
+python manage.py migrate
+python manage.py runserver 0.0.0.0:8000
+python manage.py createsuperuser
+python manage.py runserver 0.0.0.0:8000
+python manage.py makemigrations
+python manage.py migrate
+doskey /history > commands.log
+doskey /history
+doskey /h > cmdhistory.txt
+doskey /history > cmdhistory.txt
+doskey /history > test.txt
